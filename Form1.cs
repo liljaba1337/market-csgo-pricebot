@@ -6,6 +6,7 @@ namespace cstmpricebot
     public partial class Form1 : Form
     {
         private Api api;
+        private System.Windows.Forms.Timer timer;
         private Dictionary<long, Item> botitems = new();
         public Form1()
         {
@@ -14,15 +15,16 @@ namespace cstmpricebot
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            //SettingsData settings;
-            //Api api = new("");
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = 60000; // 1 minute (60000 ms)
+            timer.Tick += CheckPrices;
+            SettingsData settings;
             await Settings.InitializeJson();
             await Items.InitializeJson();
-            SettingsData settings = await Settings.LoadJson();
-            api = new(settings.ApiKey);
+            //SettingsData settings = await Settings.LoadJson();
+            //api = new(settings.ApiKey);
 
             bool valid = false;
-            /*
             do
             {
                 settings = await Settings.LoadJson();
@@ -33,7 +35,7 @@ namespace cstmpricebot
                     continue;
                 }
                 api = new(settings.ApiKey);
-                Console.WriteLine("testing api key = "+settings.ApiKey);
+                Console.WriteLine("testing api key");
                 valid = await api.test();
                 Console.WriteLine("valid = " + valid);
                 if (!valid)
@@ -41,7 +43,7 @@ namespace cstmpricebot
                     ApiKeyPrompt prompt = new();
                     prompt.ShowDialog();
                 }
-            } while (settings.ApiKey == null || !valid);*/
+            } while (settings.ApiKey == null || !valid);
             label1.Text = "получение предметов на продаже";
 
             List<ApiItem> items = await api.GetItemsOnSale();
@@ -60,6 +62,7 @@ namespace cstmpricebot
             }
             label1.Visible = false;
             button1.Visible = true;
+            timer.Start();
         }
         private void AddItem(object? sender, EventArgs e)
         {
@@ -77,7 +80,7 @@ namespace cstmpricebot
                         Price = decimal.Parse(priceLabel?.Text.Replace("$", ""))
                     };
                     AdditionPrompt prompt = new(item, parentPanel, this);
-                    
+
                     prompt.ShowDialog();
                 }
             }
@@ -126,7 +129,7 @@ namespace cstmpricebot
 
             return panel;
         }
-        internal Panel CreateBotItemPanel(Item item)
+        internal Panel CreateBotItemPanel(Item item, decimal? price = null)
         {
             Size textSize = TextRenderer.MeasureText(item.Name, SystemFonts.DefaultFont);
             Panel panel = new Panel
@@ -139,8 +142,14 @@ namespace cstmpricebot
             };
 
             Label nameLabel = new Label { Name = "name", Text = item.Name, AutoSize = true, Location = new Point(5, 5) };
-            Label priceLabel = new Label { Name = "price", Text = $"${item.BasePrice}       (${item.MinPrice} - ${item.MaxPrice})",
-                AutoSize = true, Location = new Point(5, 25) };
+            Label priceLabel = new Label
+            {
+                Name = "price",
+                Text = $"${item.BasePrice}       (${item.MinPrice} - ${item.MaxPrice})",
+                AutoSize = true,
+                Location = new Point(5, 25)
+            };
+            if(price != null) priceLabel.Text = $"${price}       (${item.MinPrice} - ${item.MaxPrice})";
             Label idLabel = new Label { Name = "id", Text = item.Id.ToString(), Visible = false };
             Button editButton = new Button { Name = item.Id.ToString(), Text = "Изменить", Location = new Point(5, 45) };
             Button removeButton = new Button { Name = item.Id.ToString(), Text = "Удалить", Location = new Point(5, 70) };
@@ -156,9 +165,31 @@ namespace cstmpricebot
             botitems[item.Id] = item;
             return panel;
         }
+        internal void UpdateBotItemPanel(Item item, decimal? price = null)
+        {
+            Panel newPanel = CreateBotItemPanel(item, price);
+            Panel? existingPanel = flowLayoutPanel2.Controls
+            .OfType<Panel>()
+                .FirstOrDefault(y => y.Name == item.Id.ToString());
+
+            if (existingPanel != null)
+            {
+                int index = flowLayoutPanel2.Controls.IndexOf(existingPanel);
+                flowLayoutPanel2.Controls.Remove(existingPanel);
+                flowLayoutPanel2.Controls.Add(newPanel);
+                flowLayoutPanel2.Controls.SetChildIndex(newPanel, index);
+            }
+            else
+            {
+                flowLayoutPanel2.Controls.Add(newPanel);
+            }
+        }
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            button1.Enabled = false;
+            label1.Text = "получение предметов на продаже";
+            label1.Visible = true;
             flowLayoutPanel1.Controls.Clear();
             List<ApiItem> items = await api.GetItemsOnSale();
             List<filemanager.Item> botitems = await Items.LoadJson();
@@ -168,6 +199,42 @@ namespace cstmpricebot
                 if (presentedids.Contains(item.Id)) continue;
                 Panel panel = CreateApiItemPanel(item);
                 flowLayoutPanel1.Controls.Add(panel);
+            }
+            label1.Visible = false;
+            button1.Enabled = true;
+        }
+
+        private async void CheckPrices(object sender, EventArgs e)
+        {
+            Dictionary<Item, decimal> bestprices = await api.GetBestPrices(botitems.Values.ToList());
+            foreach (Item item in botitems.Values)
+            {
+                if (bestprices.ContainsKey(item))
+                {
+                    if (bestprices[item] == -1)
+                    {
+                        Console.WriteLine("already have the best price for " + item.Name);
+                        continue;
+                    }
+                    decimal BestPrice = bestprices[item] - 0.001m;
+                    decimal pricetoset = BestPrice;
+                    Console.WriteLine("the best price for " + item.Name + " is " + BestPrice);
+                    if (BestPrice < item.MinPrice || BestPrice > item.MaxPrice)
+                    {
+                        Console.WriteLine("the best price is outside the borders, resetting to base");
+                        pricetoset = item.BasePrice;
+                    }
+                    if(!await api.SetPrice(item, pricetoset))
+                    {
+                        Console.WriteLine("failed to set price for " + item.Name);
+                        continue;
+                    }
+                    UpdateBotItemPanel(item, pricetoset);
+                }
+                else
+                {
+                    Console.WriteLine("no best price for " + item.Name);
+                }
             }
         }
     }

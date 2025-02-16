@@ -68,22 +68,7 @@ namespace cstmpricebot
                 botitem.MaxPrice = decimal.Parse(maxpricetb.Text);
                 await Items.SaveItem(botitem);
 
-                Panel newPanel = form.CreateBotItemPanel(botitem);
-                Panel? existingPanel = form.flowLayoutPanel2.Controls
-                    .OfType<Panel>()
-                    .FirstOrDefault(y => y.Name == botitem.Id.ToString());
-
-                if (existingPanel != null)
-                {
-                    int index = form.flowLayoutPanel2.Controls.IndexOf(existingPanel);
-                    form.flowLayoutPanel2.Controls.Remove(existingPanel);
-                    form.flowLayoutPanel2.Controls.Add(newPanel);
-                    form.flowLayoutPanel2.Controls.SetChildIndex(newPanel, index);
-                }
-                else
-                {
-                    form.flowLayoutPanel2.Controls.Add(newPanel);
-                }
+                form.UpdateBotItemPanel(botitem);
 
                 Close();
                 return;
