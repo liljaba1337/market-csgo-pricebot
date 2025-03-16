@@ -87,6 +87,7 @@ namespace cstmpricebot
             if (!response.IsSuccessStatusCode) return false;
             dynamic? content = JsonConvert.DeserializeObject(response.Content);
             if (content == null) return false;
+            Console.WriteLine(response.Content);
             return content["success"] == "True";
         }
         private string GenerateParams(string apiKey, List<string> names)

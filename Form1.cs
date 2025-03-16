@@ -49,19 +49,31 @@ namespace cstmpricebot
             List<ApiItem> items = await api.GetItemsOnSale();
             List<Item> parsedbotitems = await Items.LoadJson();
             List<long> presentedids = parsedbotitems.Select(i => i.Id).ToList();
+            List<long> websitepresentedids = items.Select(i => i.Id).ToList();
             foreach (ApiItem item in items)
             {
                 if (presentedids.Contains(item.Id)) continue;
                 Panel panel = CreateApiItemPanel(item);
                 flowLayoutPanel1.Controls.Add(panel);
             }
+            // items - on sale on site
+            // parsedbotitems - items listed in bot
+            // presentedids - ids of items listed in bot
+            // websitepresentedids - ids of items on sale on site
             foreach (Item item in parsedbotitems)
             {
+                if (!websitepresentedids.Contains(item.Id))
+                {
+                    Console.WriteLine("item " + item.Name + " is not on sale on site anymore");
+                    await Items.RemoveItem(item);
+                    continue;
+                }
                 Panel panel = CreateBotItemPanel(item);
                 flowLayoutPanel2.Controls.Add(panel);
             }
             label1.Visible = false;
             button1.Visible = true;
+            //CheckPrices(null, null);
             timer.Start();
         }
         private void AddItem(object? sender, EventArgs e)
