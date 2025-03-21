@@ -1,0 +1,28 @@
+name: Build and Upload Executable
+
+on:
+  push:
+    branches:
+      - main  # Runs on every push to main
+
+jobs:
+  build:
+    runs-on: windows-latest  # Use a Windows runner for C# projects
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0  # Change to match your project
+
+      - name: Build project
+        run: dotnet publish -c Release -r win-x64 --self-contained false -o output
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: latest-build
+          path: output/*
