@@ -44,7 +44,7 @@ namespace cstmpricebot
                     prompt.ShowDialog();
                 }
             } while (settings.ApiKey == null || !valid);
-            label1.Text = "получение предметов на продаже";
+            label1.Text = "Getting the items";
 
             List<ApiItem> items = await api.GetItemsOnSale();
             List<Item> parsedbotitems = await Items.LoadJson();
@@ -131,7 +131,7 @@ namespace cstmpricebot
             Label nameLabel = new Label { Name = "name", Text = item.Name, AutoSize = true, Location = new Point(5, 5) };
             Label priceLabel = new Label { Name = "price", Text = $"${item.Price}", AutoSize = true, Location = new Point(5, 25) };
             Label idLabel = new Label { Name = "id", Text = item.Id.ToString(), Visible = false };
-            Button addButton = new Button { Text = "Добавить", Location = new Point(5, 45) };
+            Button addButton = new Button { Text = "Add", Location = new Point(5, 45) };
             addButton.Click += AddItem;
 
             panel.Controls.Add(nameLabel);
@@ -163,8 +163,8 @@ namespace cstmpricebot
             };
             if(price != null) priceLabel.Text = $"${price}       (${item.MinPrice} - ${item.MaxPrice})";
             Label idLabel = new Label { Name = "id", Text = item.Id.ToString(), Visible = false };
-            Button editButton = new Button { Name = item.Id.ToString(), Text = "Изменить", Location = new Point(5, 45) };
-            Button removeButton = new Button { Name = item.Id.ToString(), Text = "Удалить", Location = new Point(5, 70) };
+            Button editButton = new Button { Name = item.Id.ToString(), Text = "Edit", Location = new Point(5, 45) };
+            Button removeButton = new Button { Name = item.Id.ToString(), Text = "Delete", Location = new Point(5, 70) };
 
             editButton.Click += EditItem;
             removeButton.Click += RemoveItem;
@@ -200,7 +200,7 @@ namespace cstmpricebot
         private async void button1_Click(object sender, EventArgs e)
         {
             button1.Enabled = false;
-            label1.Text = "получение предметов на продаже";
+            label1.Text = "Getting the items";
             label1.Visible = true;
             flowLayoutPanel1.Controls.Clear();
             List<ApiItem> items = await api.GetItemsOnSale();

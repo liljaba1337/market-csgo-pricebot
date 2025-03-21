@@ -23,7 +23,7 @@ namespace cstmpricebot.filemanager
             SettingsData? settings = JsonConvert.DeserializeObject<SettingsData>(json);
             if (settings == null)
             {
-                MessageBox.Show("Ошибка загрузки настроек", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred while loading settings", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(1);
             }
             return settings;

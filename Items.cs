@@ -32,7 +32,7 @@ namespace cstmpricebot.filemanager
             List<Item>? items = JsonConvert.DeserializeObject<List<Item>>(json);
             if (items == null)
             {
-                MessageBox.Show("Ошибка загрузки предметов", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred while getting the items.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(1);
             }
             return items;

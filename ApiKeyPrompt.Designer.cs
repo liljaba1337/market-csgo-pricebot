@@ -31,47 +31,59 @@
             apikeytb = new TextBox();
             button1 = new Button();
             button2 = new Button();
+            label1 = new Label();
             SuspendLayout();
             // 
             // apikeytb
             // 
-            apikeytb.Location = new Point(24, 35);
+            apikeytb.Location = new Point(23, 59);
             apikeytb.Name = "apikeytb";
-            apikeytb.PlaceholderText = "апи ключ";
+            apikeytb.PlaceholderText = "Your API key";
             apikeytb.Size = new Size(266, 23);
             apikeytb.TabIndex = 0;
             // 
             // button1
             // 
-            button1.Location = new Point(24, 6);
+            button1.Location = new Point(23, 30);
             button1.Name = "button1";
             button1.Size = new Size(266, 23);
             button1.TabIndex = 1;
-            button1.Text = "открыть страницу для создания";
+            button1.Text = "Open the page to create one";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
             // button2
             // 
-            button2.Location = new Point(24, 64);
+            button2.Location = new Point(23, 88);
             button2.Name = "button2";
             button2.Size = new Size(266, 23);
             button2.TabIndex = 1;
-            button2.Text = "сохранить";
+            button2.Text = "Save";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(33, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(241, 17);
+            label1.TabIndex = 2;
+            label1.Text = "Your API key is invalid or was not yet set";
             // 
             // ApiKeyPrompt
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(326, 103);
+            ClientSize = new Size(311, 124);
+            Controls.Add(label1);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(apikeytb);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "ApiKeyPrompt";
-            Text = "ключ невалид или не указан";
+            Text = "API key";
             ResumeLayout(false);
             PerformLayout();
         }
@@ -81,5 +93,6 @@
         private TextBox apikeytb;
         private Button button1;
         private Button button2;
+        private Label label1;
     }
 }

@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdditionPrompt));
             namelbl = new Label();
             pricelbl = new Label();
             trackBar1 = new TrackBar();
@@ -42,6 +44,8 @@
             maxpricetb = new TextBox();
             label8 = new Label();
             button1 = new Button();
+            toolTip1 = new ToolTip(components);
+            button2 = new Button();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
             SuspendLayout();
@@ -50,10 +54,10 @@
             // 
             namelbl.Anchor = AnchorStyles.Top;
             namelbl.AutoSize = true;
-            namelbl.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold);
+            namelbl.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             namelbl.Location = new Point(10, 13);
             namelbl.Name = "namelbl";
-            namelbl.Size = new Size(61, 25);
+            namelbl.Size = new Size(49, 18);
             namelbl.TabIndex = 0;
             namelbl.Text = "name";
             // 
@@ -61,7 +65,7 @@
             // 
             pricelbl.AutoSize = true;
             pricelbl.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold);
-            pricelbl.Location = new Point(12, 38);
+            pricelbl.Location = new Point(183, 63);
             pricelbl.Name = "pricelbl";
             pricelbl.Size = new Size(56, 25);
             pricelbl.TabIndex = 1;
@@ -90,18 +94,20 @@
             label2.AutoSize = true;
             label2.Location = new Point(12, 73);
             label2.Name = "label2";
-            label2.Size = new Size(64, 15);
+            label2.Size = new Size(57, 15);
             label2.TabIndex = 5;
-            label2.Text = "Мин. цена";
+            label2.Text = "Min price";
+            toolTip1.SetToolTip(label2, "The lowest price allowed.");
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Location = new Point(334, 73);
             label3.Name = "label3";
-            label3.Size = new Size(68, 15);
+            label3.Size = new Size(75, 15);
             label3.TabIndex = 6;
-            label3.Text = "Макс. цена";
+            label3.Text = "Max price (?)";
+            toolTip1.SetToolTip(label3, resources.GetString("label3.ToolTip"));
             // 
             // label4
             // 
@@ -172,15 +178,32 @@
             button1.Name = "button1";
             button1.Size = new Size(120, 35);
             button1.TabIndex = 15;
-            button1.Text = "Сохранить";
+            button1.Text = "Save";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
+            // 
+            // toolTip1
+            // 
+            toolTip1.AutoPopDelay = 10000;
+            toolTip1.InitialDelay = 500;
+            toolTip1.ReshowDelay = 100;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(2, 210);
+            button2.Name = "button2";
+            button2.Size = new Size(159, 23);
+            button2.TabIndex = 17;
+            button2.Text = "Price displayed incorrectly?";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // AdditionPrompt
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(414, 220);
+            ClientSize = new Size(414, 234);
+            Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(maxpricetb);
             Controls.Add(label8);
@@ -195,8 +218,9 @@
             Controls.Add(trackBar1);
             Controls.Add(pricelbl);
             Controls.Add(namelbl);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "AdditionPrompt";
-            Text = "Добавление предмета";
+            Text = "Add an item";
             Load += AdditionPrompt_Load;
             ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar2).EndInit();
@@ -220,5 +244,7 @@
         private TextBox maxpricetb;
         private Label label8;
         private Button button1;
+        private ToolTip toolTip1;
+        private Button button2;
     }
 }

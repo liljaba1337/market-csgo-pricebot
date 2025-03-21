@@ -87,5 +87,13 @@ namespace cstmpricebot
             form.flowLayoutPanel2.Controls.Add(newpanel);
             Close();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("If your currency on market.csgo.com is set to anything other than USD, " +
+                "prices will be displayed in your selected currency, even if a dollar sign appears " +
+                "next to them. This does not affect the software—just set your min and max prices in your currency.",
+                "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

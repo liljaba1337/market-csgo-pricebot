@@ -21,11 +21,12 @@ namespace cstmpricebot
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Process.Start(new ProcessStartInfo("https://market.csgo.com/ru/api/content/start#apigen") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("https://market.csgo.com/en/api/content/start#apigen") { UseShellExecute = true });
         }
 
         private async void button2_Click(object sender, EventArgs e)
         {
+            button2.Enabled = false;
             Api api = new(apikeytb.Text);
             if (await api.test())
             {
@@ -34,8 +35,9 @@ namespace cstmpricebot
             }
             else
             {
-                MessageBox.Show("невалидный ключ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Invalid key", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            button2.Enabled = true;
         }
     }
 }
