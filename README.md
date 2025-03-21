@@ -5,7 +5,7 @@ This software automatically lowers your item's price by **$0.001** below the low
 
 ---
 
-![Screenshot](.git/photos/screenshot.png)
+![Screenshot](.github/photos/screenshot.png)
 
 ## Build
 The latest compiled executable can be found [here](https://github.com/LIL-JABA/cstmpricebot/actions/workflows/dotnet.yml)
