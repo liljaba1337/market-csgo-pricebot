@@ -8,7 +8,7 @@ This software automatically lowers your item's price by **$0.001** below the low
 ![Screenshot](.github/photos/screenshot.png)
 
 ## Build
-The latest compiled executable can be found [here](https://github.com/LIL-JABA/cstmpricebot/actions/workflows/dotnet.yml)
+The latest compiled executable can be found [here](https://github.com/liljaba1337/market-csgo-pricebot/actions/workflows/dotnet.yml)
 
 ## Troubleshooting
 
